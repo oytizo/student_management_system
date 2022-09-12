@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Backend\Teacher\teacherModel;
-use App\Models\backend\teacher\teacherModel1;
+use App\Models\backend\teacher\teachertable;
 
 class teacherController extends Controller
 {
@@ -21,7 +21,7 @@ class teacherController extends Controller
      */
     public function index()
     {
-        $teacherinfo = teacherModel1::all();
+        $teacherinfo = teachertable::all();
         return view('backend/pages/manage-teacher', compact('teacherinfo'));
     }
 
@@ -64,14 +64,15 @@ class teacherController extends Controller
 
                     DB::transaction(function () {
                         DB::insert("insert into users(name,email,role,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['role'] . "','" . $GLOBALS['password'] . "')");
-                        DB::insert("insert into teacher_model1s(name,age,contact,email,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['age'] . "','" . $GLOBALS['contact'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['password'] . "')");
+                        DB::insert("insert into teachertables(name,age,contact,email,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['age'] . "','" . $GLOBALS['contact'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['password'] . "')");
                         //   return back();
                         return view('backend/pages/addteacher');
                     });
                 });
 
                 if (is_null($exception)) {
-                    return true;
+                    $teacherinfo = teachertable::all();
+                    return view('backend/pages/manage-teacher', compact('teacherinfo'));
                 } else {
                     throw new Exception;
                 }
@@ -102,7 +103,7 @@ class teacherController extends Controller
      */
     public function edit($id)
     {
-        $teacheredit = teacherModel1::find($id);
+        $teacheredit = teachertable::find($id);
         // dd($teacheredit);
         return view('backend/pages/editteacher', compact('teacheredit'));
     }
@@ -116,7 +117,7 @@ class teacherController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $updateteacher = teacherModel1::find($id);
+        $updateteacher = teachertable::find($id);
         $GLOBALS['updatename'] = $request->name;
         $GLOBALS['updateage'] = $request->age;
         $GLOBALS['updatecontact'] = $request->contact_no;
@@ -124,23 +125,39 @@ class teacherController extends Controller
 
         $GLOBALS['updateid'] = $request->id;
 
-        // $username1=teacherModel1::find(1)->user; 
+        // $username1=teachertable::find(1)->user; 
         // $username1=User::find(4)->teacher->name;
 
         // dd($username1);
 
-        // $GLOBALS['username']=teacherModel1::find($GLOBALS['updateemail'])->user->name;
-        // $GLOBALS['useremail']=teacherModel1::find($GLOBALS['updateemail'])->user->email;
+        // $GLOBALS['username']=teachertable::find($GLOBALS['updateemail'])->user->name;
+        // $GLOBALS['useremail']=teachertable::find($GLOBALS['updateemail'])->user->email;
 
 
+        try {
+            // Transaction
+            $exception = DB::transaction(function () {
 
-        DB::transaction(function () {
-            DB::update("update teacher_model1s  set name ='" . $GLOBALS['updatename'] . "',age='" . $GLOBALS['updateage'] . "',contact='" . $GLOBALS['updatecontact'] . "',email='" . $GLOBALS['updateemail'] . "' where id ='" . $GLOBALS['updateid'] . "'");
-            DB::update("update users  set name ='" . $GLOBALS['updatename'] . "',email='" . $GLOBALS['updateemail'] . "' where id ='" . $GLOBALS['updateid'] . "'");
+                DB::transaction(function () {
+                    DB::update("update teachertables  set name ='" . $GLOBALS['updatename'] . "',age='" . $GLOBALS['updateage'] . "',contact='" . $GLOBALS['updatecontact'] . "',email='" . $GLOBALS['updateemail'] . "' where id ='" . $GLOBALS['updateid'] . "'");
+                    DB::update("update users  set name ='" . $GLOBALS['updatename'] . "',email='" . $GLOBALS['updateemail'] . "' where id ='" . $GLOBALS['updateid'] . "'");
+        
+                    return view('backend/pages/addteacher');
+                });
+            });
 
-            return view('backend/pages/addteacher');
-        });
-    }
+            if (is_null($exception)) {
+                $teacherinfo = teachertable::all();
+                return view('backend/pages/manage-teacher', compact('teacherinfo'));
+            } else {
+                throw new Exception;
+            }
+        } catch (Exception $e) {
+            return false;
+        }
+    } 
+
+
 
     /**
      * Remove the specified resource from storage.
@@ -152,28 +169,35 @@ class teacherController extends Controller
     {
         $GLOBALS['id'] = $id;
 
-        $username1 = teacherModel1::find(1)->user;
+        // dd($GLOBALS['id']);
+
+        $GLOBALS['userid'] = teachertable::find($id)->user->id;
         // $username1=User::find($id)->teacher->name;
-        dd($username1);
+        // dd($GLOBALS['userid'] );
 
         try {
             // Transaction
             $exception = DB::transaction(function () {
 
                 DB::transaction(function () {
-                    DB::delete("delete from user where id='" . $GLOBALS['id'] . "'");
-                    DB::delete("delete from teacher_model1s where id='" . $GLOBALS['id'] . "'");
+                    DB::delete("delete from users where id='" . $GLOBALS['id'] . "'");
+                    DB::delete("delete from teachertables where id='" . $GLOBALS['userid'] . "'");
+
+                    // dd($GLOBALS['userid']);
 
                     //   return back();
-                    return view('backend/pages/addteacher');
+                    // return view('backend/pages/addteacher');
                 });
+                
             });
-
             if (is_null($exception)) {
-                return true;
+                $teacherinfo = teachertable::all();
+                return view('backend/pages/manage-teacher', compact('teacherinfo'));
             } else {
                 throw new Exception;
             }
+
+          
         } catch (Exception $e) {
             return false;
         }

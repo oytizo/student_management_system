@@ -6,7 +6,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class teacherModel1 extends Model
+class teachertable extends Model
 {
     use HasFactory;
 
@@ -20,6 +20,6 @@ class teacherModel1 extends Model
 
     public function user()
     {
-        return $this->hasOne(User::class,'email','t_email');
+        return $this->hasOne(User::class,'email','email');
     }
 }
