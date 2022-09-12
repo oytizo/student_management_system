@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Backend\Teacher\teacherController;
+use App\Http\Controllers\frontend\teacher\studentController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,7 +28,7 @@ Route::get('/student_feed', function () {
 })->middleware(['auth'])->name('student_feed');
 
 Route::get('/teacher_feed', function () {
-    return view('frontend.student.student');
+    return view('frontend.teacher.teacher');
 })->middleware(['auth'])->name('teacher_feed');
 
 Route::group(['prefix'=>'/student_feed'],function(){
@@ -40,12 +41,25 @@ Route::group(['prefix'=>'/student_feed'],function(){
 
 Route::group(['prefix'=>'/admin'],function(){
     Route::group(['prefix'=>'/teacher-view'],function(){
-        Route::get('/teacherview',[teacherController::class,'index'])->name('teacherview')->middleware(['auth']);
-        Route::get('/addteacherview',[teacherController::class,'addteacherview'])->name('addteacherview')->middleware(['auth']);
-        Route::post('/addteacher',[teacherController::class,'store'])->name('addteacher')->middleware(['auth']);
-        Route::get('/editteacher/{id}',[teacherController::class,'edit'])->name('editteacher')->middleware(['auth']);
-        Route::post('/updateteacher/{id}',[teacherController::class,'update'])->name('updateteacher')->middleware(['auth']);
-        Route::get('/deleteteacher/{id}',[teacherController::class,'destroy'])->name('deleteteacher')->middleware(['auth']);
+        Route::get('/teacherview',[teacherController::class,'index'])->name('teacherview')->middleware(['myauth']);
+        Route::get('/addteacherview',[teacherController::class,'addteacherview'])->name('addteacherview')->middleware(['myauth']);
+        Route::post('/addteacher',[teacherController::class,'store'])->name('addteacher')->middleware(['myauth']);
+        Route::get('/editteacher/{id}',[teacherController::class,'edit'])->name('editteacher')->middleware(['myauth']);
+        Route::post('/updateteacher/{id}',[teacherController::class,'update'])->name('updateteacher')->middleware(['myauth']);
+        Route::get('/deleteteacher/{id}',[teacherController::class,'destroy'])->name('deleteteacher')->middleware(['myauth']);
+    });
+
+});
+
+Route::group(['prefix'=>'/teacher_feed'],function(){
+    Route::group(['prefix'=>'/teacher-dashboard'],function(){
+        Route::get('/addstudent',[studentController::class,'index'])->name('addstudent')->middleware(['auth']);
+        Route::post('/storestudent',[studentController::class,'store'])->name('storestudent')->middleware(['auth']);
+        // Route::get('/addteacherview',[teacherController::class,'addteacherview'])->name('addteacherview')->middleware(['auth']);
+        // Route::post('/addteacher',[teacherController::class,'store'])->name('addteacher')->middleware(['auth']);
+        // Route::get('/editteacher/{id}',[teacherController::class,'edit'])->name('editteacher')->middleware(['auth']);
+        // Route::post('/updateteacher/{id}',[teacherController::class,'update'])->name('updateteacher')->middleware(['auth']);
+        // Route::get('/deleteteacher/{id}',[teacherController::class,'destroy'])->name('deleteteacher')->middleware(['auth']);
     });
 
 });
