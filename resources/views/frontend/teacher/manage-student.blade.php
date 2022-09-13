@@ -6,16 +6,11 @@
 <link rel="stylesheet" href="{{ asset('bootstrap/css/bootstrap.min.css') }}">
 </head>
 <body>
-
-    @extends('backend/master_template/master-template')
-
-    @Section('maincontent')
-    
-    
+ 
     <div class="row">
         <div class="col-md-6 offset-md-1">
             <h3>Student Manage Table</h3>
-          <a href="{{ Route('addteacherview') }}">Add Student</a>
+            <a href="{{ Route('teacher_feed') }}">Teacher Feed</a>
           <form action="">
             <table class="table border-1">
                 <thead>
@@ -32,12 +27,11 @@
                  <tr>
                   <td>{{ $item->name }}</td>
                   <td>{{ $item->course_name }}</td>
-                  <td>{{ $item->age }}</td>
                   <td>{{ $item->contact }}</td>
                   <td>{{ $item->email }}</td>
                   <td>
-                    <a href="{{ Route('editteacher',$item->id) }}" class="btn btn-sm btn-primary">Edit</a>
-                    <a href="{{ Route('deleteteacher',$item->id) }}" class="btn btn-sm btn-danger">Delete</a>
+                    <a href="{{ Route('editstudent',$item->id) }}" class="btn btn-sm btn-primary">Edit</a>
+                    <a href="{{ Route('deletestudent',$item->id) }}" class="btn btn-sm btn-danger">Delete</a>
                   </td>
                 </tr>
                  @endforeach
@@ -47,10 +41,6 @@
         </div>
     </div>
     
-    
-    
-    
-    @endsection
 
 
   <script src="{{ asset('bootstrap/js/bootstrap.min.js') }}"></script>

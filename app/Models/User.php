@@ -9,6 +9,8 @@ use Illuminate\Notifications\Notifiable;
 use App\Models\Backend\Teacher\teacherModel;
 use App\Models\backend\teacher\teacherModel1;
 use App\Models\backend\teacher\teachertable;
+use App\Models\frontend\studentModel;
+use App\Models\frontend\teacher\studenttable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -50,5 +52,10 @@ class User extends Authenticatable
     public function teacher()
     {
         return $this->hasOne(teachertable::class,'email','email');
+    }
+
+    public function student()
+    {
+        return $this->hasOne(studenttable::class,'email','email');
     }
 }

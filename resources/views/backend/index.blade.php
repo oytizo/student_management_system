@@ -67,7 +67,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Custom Components:</h6>
                         <a class="collapse-item" href="{{ route('teacherview') }}">Teacher Info</a>
-                        <a class="collapse-item" href="">Student Info</a>
+                        <a class="collapse-item" href="{{ route('studentview') }}">Student Info</a>
                     </div>
                 </div>
             </li>

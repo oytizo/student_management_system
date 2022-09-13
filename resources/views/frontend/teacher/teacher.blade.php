@@ -14,9 +14,7 @@
 
 <ul>
   <li><a href="{{ Route('addstudent') }}">Add Student</a></li>
-  <li><a href="#news">News</a></li>
-  <li><a href="#contact">Contact</a></li>
-  <li><a href="#about">About</a></li>
+  <li><a href="{{ Route('viewstudent')  }}">View Student</a></li>
 </ul>
 <form method="POST" action="{{ route('logout') }}">
     @csrf
