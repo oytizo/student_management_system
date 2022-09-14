@@ -2,12 +2,12 @@
 
 namespace App\Models\frontend\teacher;
 
-use App\Models\backend\teacher\teachertable;
+use App\Models\backend\teacher\teachers;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Auth\User;
 
-class studenttable extends Model
+class students extends Model
 {
     use HasFactory;
 
@@ -21,7 +21,7 @@ class studenttable extends Model
     ];
 
     public function teacher(){
-        return $this->hasMany(teachertable::class,'id','id');
+        return $this->hasMany(teachers::class,'id','id');
     }
     public function user(){
         return $this->hasone(User::class,'email','email');

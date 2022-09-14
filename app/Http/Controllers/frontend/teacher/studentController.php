@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use Psy\Exception\Exception;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
-use App\Models\backend\teacher\teachertable;
-use App\Models\frontend\teacher\studenttable;
+use App\Models\backend\teacher\teachers;
+use App\Models\frontend\teacher\students;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 
@@ -34,7 +34,7 @@ class studentController extends Controller
         $u_id = Auth::user()->id;
         $userid = User::find($u_id)->teacher->id;
 
-        $studentinfo = studenttable::where('t_id', $userid)->get();
+        $studentinfo = students::where('t_id', $userid)->get();
         return view('frontend/teacher/manage-student', compact('studentinfo'));
     }
 
@@ -58,7 +58,7 @@ class studentController extends Controller
         // dd($email);
         $u_id = Auth::user()->id;
         $userid = User::find($u_id)->teacher->id;
-        // $studentinfo=teachertable::find(3)->student->name;
+        // $studentinfo=teachers::find(3)->student->name;
 
         $GLOBALS['user_id'] = $userid;
 
@@ -72,14 +72,14 @@ class studentController extends Controller
 
                     DB::transaction(function () {
                         DB::insert("insert into users(name,email,role,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['role'] . "','" . $GLOBALS['password'] . "')");
-                        DB::insert("insert into studenttables(name,course_name,contact,t_id,email,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['course_name'] . "','" . $GLOBALS['contact'] . "','" . $GLOBALS['user_id'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['password'] . "')");
+                        DB::insert("insert into students(name,course_name,contact,t_id,email,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['course_name'] . "','" . $GLOBALS['contact'] . "','" . $GLOBALS['user_id'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['password'] . "')");
                         //   return back();
                         // return view('backend/pages/addteacher');
                     });
                 });
 
                 if (is_null($exception)) {
-                    $studentinfo = studenttable::where('t_id', $GLOBALS['user_id']);
+                    $studentinfo = students::where('t_id', $GLOBALS['user_id'])->get();
                     return view('frontend/teacher/manage-student', compact('studentinfo'));
                 } else {
                     throw new Exception;
@@ -111,7 +111,7 @@ class studentController extends Controller
      */
     public function edit($id)
     {
-        $studentinfo = studenttable::find($id);
+        $studentinfo = students::find($id);
         return view('frontend/teacher/editstudent', compact('studentinfo'));
     }
 
@@ -124,7 +124,7 @@ class studentController extends Controller
      */
     public function update1(Request $request, $id)
     {
-        $updateteacher = studenttable::find($id);
+        $updateteacher = students::find($id);
         $GLOBALS['updatename'] = $request->name;
         $GLOBALS['updatecourse'] = $request->course_name;
         $GLOBALS['updatecontact'] = $request->contact_no;
@@ -136,13 +136,13 @@ class studentController extends Controller
             $exception = DB::transaction(function () {
 
                 DB::transaction(function () {
-                    DB::update("update studenttables  set name ='" . $GLOBALS['updatename'] . "',course_name='" . $GLOBALS['updatecourse'] . "',contact='" . $GLOBALS['updatecontact'] . "',email='" . $GLOBALS['updateemail'] . "' where id ='" . $GLOBALS['updateid'] . "'");
+                    DB::update("update students  set name ='" . $GLOBALS['updatename'] . "',course_name='" . $GLOBALS['updatecourse'] . "',contact='" . $GLOBALS['updatecontact'] . "',email='" . $GLOBALS['updateemail'] . "' where id ='" . $GLOBALS['updateid'] . "'");
                     DB::update("update users  set name ='" . $GLOBALS['updatename'] . "',email='" . $GLOBALS['updateemail'] . "' where id ='" . $GLOBALS['updateid'] . "'");
                 });
             });
 
             if (is_null($exception)) {
-                $studentinfo = studenttable::all();
+                $studentinfo = students::all();
                 return view('frontend/teacher/manage-student', compact('studentinfo'));
             } else {
                 throw new Exception;
@@ -161,17 +161,17 @@ class studentController extends Controller
     public function destroy($id)
     {
         $GLOBALS['id'] = $id;
-        $GLOBALS['userid'] = studenttable::find($id)->user->id;
+        $GLOBALS['userid'] = students::find($id)->user->id;
         try {
             // Transaction
             $exception = DB::transaction(function () {
                 DB::transaction(function () {
                     DB::delete("delete from users where id='" . $GLOBALS['userid'] . "'");
-                    DB::delete("delete from studenttables where id='" . $GLOBALS['id'] . "'");
+                    DB::delete("delete from students where id='" . $GLOBALS['id'] . "'");
                 });        
             });
             if (is_null($exception)) {
-                $studentinfo = studenttable::all();
+                $studentinfo = students::all();
                 return view('frontend/teacher/manage-student', compact('studentinfo'));
             } else {
                 throw new Exception;

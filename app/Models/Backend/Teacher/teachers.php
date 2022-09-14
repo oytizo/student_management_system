@@ -3,12 +3,12 @@
 namespace App\Models\backend\teacher;
 
 use App\Models\frontend\studentModel;
-use App\Models\frontend\teacher\studenttable;
+use App\Models\frontend\teacher\students;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class teachertable extends Model
+class teachers extends Model
 {
     use HasFactory;
 
@@ -27,6 +27,6 @@ class teachertable extends Model
 
     public function student()
     {
-        return $this->hasOne(studenttable::class,'t_id','id');
+        return $this->hasOne(students::class,'t_id','id');
     }
 }
