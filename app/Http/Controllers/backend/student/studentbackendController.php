@@ -59,27 +59,24 @@ class studentbackendController extends Controller
 
         $GLOBALS['user_id'] = $request->teacher_id;
 
-        $t_id=teachers::find( $GLOBALS['user_id'])->id;
-        $GLOBALS['user_id']=$t_id;
+        $t_id = teachers::find($GLOBALS['user_id'])->id;
+        $GLOBALS['user_id'] = $t_id;
 
-        if($t_id){
+        if ($t_id) {
             if (!$email) {
 
                 try {
                     // Transaction
                     $exception = DB::transaction(function () {
-    
                         DB::transaction(function () {
                             DB::insert("insert into users(name,email,role,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['role'] . "','" . $GLOBALS['password'] . "')");
-                            DB::insert("insert into students(name,course_name,contact,t_id,email,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['course_name'] . "','" . $GLOBALS['contact'] . "','" . $GLOBALS['user_id'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['password'] . "')");
-                            //   return back();
-                            // return view('backend/pages/addteacher');
+                            DB::insert("insert into students(name,course_name,contact,t_id,email,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['course_name'] . "','" . $GLOBALS['contact'] . "','" . $GLOBALS['user_id'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['password'] . "')");                           
                         });
                     });
-    
+
                     if (is_null($exception)) {
                         $studentinfo = students::all();
-            return view('backend/pages/manage-student', compact('studentinfo'));
+                        return view('backend/pages/manage-student', compact('studentinfo'));
                     } else {
                         throw new Exception;
                     }
@@ -90,8 +87,6 @@ class studentbackendController extends Controller
                 return back();
             }
         }
-
-     
     }
 
     /**
@@ -178,7 +173,7 @@ class studentbackendController extends Controller
                 DB::transaction(function () {
                     DB::delete("delete from users where id='" . $GLOBALS['userid'] . "'");
                     DB::delete("delete from students where id='" . $GLOBALS['id'] . "'");
-                });        
+                });
             });
             if (is_null($exception)) {
                 $studentinfo = students::all();
@@ -186,11 +181,8 @@ class studentbackendController extends Controller
             } else {
                 throw new Exception;
             }
-
-          
         } catch (Exception $e) {
             return false;
         }
     }
-    
 }

@@ -6,7 +6,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 offset-md-3">
-            <h2>Add Student Infooo</h2>
+            <h2>Add Student Info</h2>
                 <form action="{{ Route('storestudents') }}" method="POST">
                     @csrf
                     <div class="form-group">

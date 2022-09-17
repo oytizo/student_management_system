@@ -35,7 +35,7 @@ Route::get('/teacher_feed', function () {
 
 Route::group(['prefix'=>'/student_feed'],function(){
     Route::group(['prefix'=>'/view'],function(){
-        Route::get('/studentprofile',[studentfrontendController::class,'studentprofile'])->name('studentprofile')->middleware(['auth']);
+        Route::get('/studentprofile',[studentfrontendController::class,'studentprofile'])->name('studentprofile')->middleware(['stauth']);
        
     });
 
@@ -69,12 +69,12 @@ Route::group(['prefix'=>'/admin'],function(){
 
 Route::group(['prefix'=>'/teacher_feed'],function(){
     Route::group(['prefix'=>'/teacher-dashboard'],function(){
-        Route::get('/addstudent',[studentController::class,'index'])->name('addstudent')->middleware(['auth']);
-        Route::get('/viewstudent',[studentController::class,'view'])->name('viewstudent')->middleware(['auth']);
-        Route::post('/storestudent',[studentController::class,'store'])->name('storestudent')->middleware(['auth']);
-        Route::post('/updatestudent/{id}',[studentController::class,'update1'])->name('updatestudent')->middleware(['auth']);
-        Route::get('/editstudent/{id}',[studentController::class,'edit'])->name('editstudent')->middleware(['auth']);
-        Route::get('/deletestudent/{id}',[studentController::class,'destroy'])->name('deletestudent')->middleware(['auth']);
+        Route::get('/addstudent',[studentController::class,'index'])->name('addstudent')->middleware(['teauth']);
+        Route::get('/viewstudent',[studentController::class,'view'])->name('viewstudent')->middleware(['teauth']);
+        Route::post('/storestudent',[studentController::class,'store'])->name('storestudent')->middleware(['teauth']);
+        Route::post('/updatestudent/{id}',[studentController::class,'update1'])->name('updatestudent')->middleware(['teauth']);
+        Route::get('/editstudent/{id}',[studentController::class,'edit'])->name('editstudent')->middleware(['teauth']);
+        Route::get('/deletestudent/{id}',[studentController::class,'destroy'])->name('deletestudent')->middleware(['teauth']);
     });
 
 });

@@ -46,6 +46,11 @@ class studentController extends Controller
      */
     public function store(Request $request)
     {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'course_name' => 'required|string||max:255',
+            'email' => 'required|email|unique:users|max:255',
+        ]);
         $role = '3';
         $GLOBALS['name'] = $request->name;
         $GLOBALS['course_name'] = $request->course_name;

@@ -65,8 +65,7 @@ class teacherController extends Controller
                     DB::transaction(function () {
                         DB::insert("insert into users(name,email,role,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['role'] . "','" . $GLOBALS['password'] . "')");
                         DB::insert("insert into teachers(name,age,contact,email,password) values('" . $GLOBALS['name'] . "','" . $GLOBALS['age'] . "','" . $GLOBALS['contact'] . "','" . $GLOBALS['email'] . "','" . $GLOBALS['password'] . "')");
-                        //   return back();
-                        return view('backend/pages/addteacher');
+                       
                     });
                 });
 
