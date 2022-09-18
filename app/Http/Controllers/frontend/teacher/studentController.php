@@ -50,6 +50,7 @@ class studentController extends Controller
             'name' => 'required|string|max:255',
             'course_name' => 'required|string||max:255',
             'email' => 'required|email|unique:users|max:255',
+            'contact_no' =>'required',
         ]);
         $role = '3';
         $GLOBALS['name'] = $request->name;
