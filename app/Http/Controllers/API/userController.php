@@ -27,20 +27,12 @@ class userController extends Controller
       $GLOBALS['user_id']=$input['t_id'];
       $GLOBALS['password']=hash::make($input['s_password']);
 
+      $studentvalidation=new students; /// create model object
+      $validator = Validator::make($request->all(),$studentvalidation->studentvalidate);
+     
 
-
-      $validated = Validator::make($input, [
-         'email' => 'required|email',
-         's_email' => 'required|email',
-         'password' => 'required',
-         's_name' => 'required|string|max:255',
-         'course_name' => 'required|string||max:255',
-         'contact_no' =>'required',
-         's_password' =>'required',
-      ]);
-
-      if ($validated->fails()) {
-         return response()->json(['error' => $validated->errors()->all()], 422);
+      if ($validator->fails()) {
+         return response()->json(['error' => $validator->errors()->all()], 422);
       }
       if (Auth::attempt(['email' => $input['email'], 'password' => $input['password']])) {
 
@@ -75,5 +67,29 @@ class userController extends Controller
       } else {
          return 'no';
       }
+   }
+
+   public function list(Request $request){
+    $list=students::with(['user','teacher']);
+    if ($request->name) {
+        $list=$list->where('name',$request->name);
+       
+     }
+     if ($request->teacher) {
+        $list=$list->whereHas('teacher',function($query) use($request){
+            $query->where('name',$request->teacher);
+        });
+        // $list=$list->has('teacher');
+     }
+     if($request->paginate){
+        $list=$list->paginate($request->paginate);
+     return response()->json(['messege' => 'successfull',
+                                  'data'   =>  $list], 400);
+     }
+    
+    //  $list=$list->get();
+    //  return response()->json(['messege' => 'successfull',
+    //                               'data'   =>  $list], 400);
+  
    }
 }

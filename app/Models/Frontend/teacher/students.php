@@ -11,6 +11,16 @@ class students extends Model
 {
     use HasFactory;
 
+    public   $studentvalidate = [
+        'email' => 'required|email',
+         's_email' => 'required|email',
+         'password' => 'required',
+         's_name' => 'required|string|max:255',
+         'course_name' => 'required|string||max:255',
+         'contact_no' =>'required',
+         's_password' =>'required',
+    ];
+
     protected $fillable = [
         'name',
         'course_name',
@@ -21,7 +31,7 @@ class students extends Model
     ];
 
     public function teacher(){
-        return $this->hasMany(teachers::class,'id','id');
+        return $this->belongsTo(teachers::class,'id','id');
     }
     public function user(){
         return $this->hasone(User::class,'email','email');

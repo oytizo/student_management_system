@@ -20,3 +20,4 @@ use Illuminate\Support\Facades\Route;
 // });
 
 Route::post('/loginuser',[userController::class,'index'])->name('loginuser');
+Route::get('/search',[userController::class,'list']);
