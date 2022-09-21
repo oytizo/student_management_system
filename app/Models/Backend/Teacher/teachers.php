@@ -27,6 +27,6 @@ class teachers extends Model
 
     public function student()
     {
-        return $this->hasOne(students::class,'t_id','id');
+        return $this->belongsTo(students::class,'t_id','id');
     }
 }

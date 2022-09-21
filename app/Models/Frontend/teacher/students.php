@@ -31,7 +31,7 @@ class students extends Model
     ];
 
     public function teacher(){
-        return $this->belongsTo(teachers::class,'id','id');
+        return $this->hasMany(teachers::class,'id','t_id');
     }
     public function user(){
         return $this->hasone(User::class,'email','email');

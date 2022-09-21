@@ -87,9 +87,9 @@ class userController extends Controller
                                   'data'   =>  $list], 400);
      }
     
-    //  $list=$list->get();
-    //  return response()->json(['messege' => 'successfull',
-    //                               'data'   =>  $list], 400);
+     $list=$list->get();
+     return response()->json(['messege' => 'successfull',
+                                  'data'   =>  $list], 400);
   
    }
 }
